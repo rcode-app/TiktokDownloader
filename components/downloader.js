@@ -64,7 +64,7 @@ class Downloader {
         if(status !== 200) throw new Error(`getDownloadLink(): Bad Request (StatusCode: ${status})`);
 
         const $ = cheerio.load(data);
-        const links = $('a.btn.waves-effect.waves-light.orange.download');
+        const links = $('[href*="tiktokcdn.com"]');
 
         if(!links.length) {
             throw new Error("Download links not found in response");
@@ -73,12 +73,13 @@ class Downloader {
         return $(links[0]).attr('href');
     }
 
+    
     async downloadFile(file_url) {
         const { status, data } = await axios({method: 'GET', url: file_url, responseType: 'arraybuffer'});
         if(status !== 200) throw new Error(`downloadFile(): Bad Request (StatusCode: ${status})`);
         return Buffer.from(data, 'binary');
     }
-
+    
     async download(video_link) {
         /* Get page form params */
         const form = await this.getDownloadParams(video_link).catch(error => {
@@ -89,12 +90,7 @@ class Downloader {
             throw new Error(`Error while get file download url: ${error.meessage}`);
         });
 
-        /* Get file stream */
-        const stream = await this.downloadFile(link).catch(error => {
-            throw new Error(`Error while get file stream: ${error.meessage}`);
-        });
-            
-        return stream;
+        return link;
     }
 }
 

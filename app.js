@@ -14,14 +14,8 @@ bot.onText(/https:\/\/vm\.tiktok\.com\/([A-Za-z0-9]+)/, async (msg, match) => {
     console.log(`[User: ${msg.from.id} | Chat: ${msg.chat.id}] ${msg.text}`);
     try {
         const video_url = match[0];
-        const buffer = await new Downloader().download(video_url);
-    
-        bot.sendVideo(
-            msg.chat.id, 
-            buffer, 
-            { reply_to_message_id: msg.message_id }, 
-            { filename: `video_${Date.now()}.mp4`, contentType: 'video/mp4' }
-        );        
+        const download_url = await new Downloader().download(video_url);
+        bot.sendVideo( msg.chat.id, download_url, { reply_to_message_id: msg.message_id } );        
     } catch (error) {
         console.log('⛔️ ' + error.message)
     }
