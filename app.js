@@ -25,4 +25,4 @@ bot.onText(/https:\/\/vm\.tiktok\.com\/([A-Za-z0-9]+)/, async (msg, match) => {
     } catch (error) {
         console.log('⛔️ ' + error.message)
     }
-})
+}) 
