@@ -101,6 +101,7 @@ class Downloader {
         const match = url.match(regex);
         if (!match) throw new Error(`Invalid url format or video id not found`);
 
+
         const response = await axios.request({
             method: "get",
             url: `https://www.instagram.com/graphql/query/?query_hash=b3055c01b4b222b8a47dc12b090e4e64&variables={"shortcode":"${match[1]}"}`,
@@ -124,12 +125,12 @@ class Downloader {
             }
         })
 
-        // const response = await axios(`https://www.instagram.com/graphql/query/?query_hash=b3055c01b4b222b8a47dc12b090e4e64&variables={"shortcode":"${match[1]}"}`);
-
+        // const response = await axios(`https://www.instagram.com/graphql/query/?query_hash=b3055c01b4b222b8a47dc12b090e4e64&variables={"shortcode":"${match[1]}"}`});
+        
         if(response.status !== 200) throw new Error(`downloadInstagramReels(${url}): Bad Request (StatusCode: ${response.status})`);
 
         if(typeof response.data !== "object") throw new Error(`Response is not JSON. (Video: ${url})`);
-
+        
         const data = ("data" in response.data && "shortcode_media" in response.data.data) ? response.data.data.shortcode_media : null;
         if(!data) throw new Error(`Can't get shortcode_media from response.data.data`);
 
